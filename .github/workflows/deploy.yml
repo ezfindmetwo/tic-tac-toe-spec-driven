@@ -6,21 +6,20 @@ on:
       - main
 
 permissions:
-  contents: write   # ✅ 給 Actions 寫入權限，才能 push gh-pages
+  contents: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm install -g prettier
-      - run: prettier --check "**/*.{js,css,html}" || true
+      - run: prettier --check "**/*.{js,css,html}"   # 可選去掉 || true
       - uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}   # ✅ 使用這個 token
-          publish_dir: ./
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist      # 指向你的靜態網站產出資料夾
           publish_branch: gh-pages
