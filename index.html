@@ -4,23 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic-Tac-Toe</title>
+  <!-- 本地 Bootstrap CSS -->
+  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Tic-Tac-Toe</h1>
-  <div class="board">
-    <div class="cell" data-index="0"></div>
-    <div class="cell" data-index="1"></div>
-    <div class="cell" data-index="2"></div>
-    <div class="cell" data-index="3"></div>
-    <div class="cell" data-index="4"></div>
-    <div class="cell" data-index="5"></div>
-    <div class="cell" data-index="6"></div>
-    <div class="cell" data-index="7"></div>
-    <div class="cell" data-index="8"></div>
+  <div class="container text-center mt-5">
+    <h1>Tic-Tac-Toe</h1>
+    <div class="board mx-auto my-3">
+      <div class="cell" data-index="0"></div>
+      <div class="cell" data-index="1"></div>
+      <div class="cell" data-index="2"></div>
+      <div class="cell" data-index="3"></div>
+      <div class="cell" data-index="4"></div>
+      <div class="cell" data-index="5"></div>
+      <div class="cell" data-index="6"></div>
+      <div class="cell" data-index="7"></div>
+      <div class="cell" data-index="8"></div>
+    </div>
+    <div id="message" class="mb-3"></div>
+    <button id="reset" class="btn btn-primary">重新開始</button>
   </div>
-  <div id="message"></div>
-  <button id="reset">重新開始</button>
 
   <script src="script.js"></script>
 </body>
