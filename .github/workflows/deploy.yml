@@ -3,37 +3,26 @@ name: Build & Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main   # 只在 main 分支有 push 時觸發
+      - main
 
 permissions:
-  contents: write   # 給 Actions 寫入 gh-pages 權限
+  contents: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ 取得 repo
       - uses: actions/checkout@v4
-
-      # 2️⃣ 安裝 Node（用於 Prettier）
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      # 3️⃣ 安裝 Prettier
       - run: npm install -g prettier
-
-      # 4️⃣ 自動格式化檔案（js, css, html）
       - run: prettier --write "**/*.{js,css,html}"
-
-      # 5️⃣ Debug：確認目錄結構和檔案
-      - name: List files
+      - name: List files for debug
         run: ls -R
-
-      # 6️⃣ 部署到 gh-pages
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./        # 根目錄就是你的靜態網站
+          publish_dir: ./
           publish_branch: gh-pages
