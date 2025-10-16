@@ -5,27 +5,22 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write   # ✅ 給 Actions 寫入權限，才能 push gh-pages
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Install Prettier (optional)
-        run: npm install -g prettier
-
-      - name: Run format check (optional)
-        run: prettier --check "**/*.{js,css,html}" || true
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - run: npm install -g prettier
+      - run: prettier --check "**/*.{js,css,html}" || true
+      - uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}   # ✅ 使用這個 token
           publish_dir: ./
+          publish_branch: gh-pages
