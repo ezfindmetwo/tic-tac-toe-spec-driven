@@ -1,69 +1,59 @@
 const cells = document.querySelectorAll(".cell");
-const messageDiv = document.getElementById("message");
+const message = document.getElementById("message");
 const resetBtn = document.getElementById("reset");
 
-let board = Array(9).fill(null);
-let currentPlayer = "X";
-let isGameOver = false;
+let turn = "X";
+let board = Array(9).fill("");
 
-const winningIndices = [
+const winningCombos = [
   [0, 1, 2],
   [3, 4, 5],
-  [6, 7, 8], // rows
+  [6, 7, 8],
   [0, 3, 6],
   [1, 4, 7],
-  [2, 5, 8], // cols
+  [2, 5, 8],
   [0, 4, 8],
-  [2, 4, 6], // diagonals
+  [2, 4, 6],
 ];
 
 function checkWinner() {
-  for (const [a, b, c] of winningIndices) {
+  for (let combo of winningCombos) {
+    const [a, b, c] = combo;
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return board[a];
+      message.textContent = `${board[a]} 贏了！`;
+      cells.forEach((cell) => cell.removeEventListener("click", handleClick));
+      return true;
     }
   }
-  if (board.every((cell) => cell !== null)) {
-    return "Tie";
+  if (!board.includes("")) {
+    message.textContent = "平手！";
+    return true;
   }
-  return null;
-}
-
-function updateMessage(winner) {
-  if (winner === "Tie") {
-    messageDiv.textContent = "平手！";
-  } else {
-    messageDiv.textContent = `${winner} 贏了！`;
-  }
+  return false;
 }
 
 function handleClick(e) {
-  const idx = parseInt(e.target.getAttribute("data-cell-index"));
-  if (board[idx] !== null || isGameOver) {
-    return;
-  }
-  board[idx] = currentPlayer;
-  e.target.textContent = currentPlayer;
+  const idx = e.target.dataset.index;
+  if (board[idx] !== "") return;
 
-  const winner = checkWinner();
-  if (winner) {
-    isGameOver = true;
-    updateMessage(winner);
-  } else {
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    messageDiv.textContent = `下一步：${currentPlayer}`;
+  board[idx] = turn;
+  e.target.textContent = turn;
+  e.target.classList.add(turn.toLowerCase());
+
+  if (!checkWinner()) {
+    turn = turn === "X" ? "O" : "X";
   }
 }
 
-function resetGame() {
-  board = Array(9).fill(null);
-  currentPlayer = "X";
-  isGameOver = false;
-  messageDiv.textContent = `下一步：${currentPlayer}`;
-  cells.forEach((cell) => (cell.textContent = ""));
-}
-
-// 初始化
-resetGame();
 cells.forEach((cell) => cell.addEventListener("click", handleClick));
-resetBtn.addEventListener("click", resetGame);
+
+resetBtn.addEventListener("click", () => {
+  board.fill("");
+  cells.forEach((cell) => {
+    cell.textContent = "";
+    cell.classList.remove("x", "o");
+    cell.addEventListener("click", handleClick);
+  });
+  message.textContent = "";
+  turn = "X";
+});
